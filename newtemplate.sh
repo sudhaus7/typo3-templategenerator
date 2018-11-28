@@ -4,7 +4,7 @@ function help {
   echo ""
   echo "-n Namespace of Extension, The Vendor"
   echo "-a Author of the extension [default: console user]"
-  echo "-v Version of your preferred TYPO3 CMS [default: '>=7.6,<9.0']"
+  echo "-v Version of your preferred TYPO3 CMS [default: '~9.5.0']"
   echo "-t Title of the Extension"
   echo "-d Name of the directory (will be created, write with _, convert to - is inside) [default: 'template']"
   echo "-e email of the author [default: empty]"
@@ -50,7 +50,7 @@ fi
 
 if [ -z "$t3version" ];
 then
-	t3version=">=7.6;<9.0"
+	t3version="~9.5.0"
 fi
 
 if [ -z "$directory" ];
@@ -79,9 +79,9 @@ mkdir -p Resources/Public/Icons
 mkdir -p Resources/Public/Css
 mkdir -p Resources/Public/Js
 
-touch Configuration/TypoScript/setup.ts
-touch Configuration/TypoScript/constants.ts
-touch Configuration/PageTSconfig/page.ts
+touch Configuration/TypoScript/setup.typoscript
+touch Configuration/TypoScript/constants.typoscript
+touch Configuration/PageTSconfig/page.tsconfig
 
 touch ext_tables.php
 touch ext_localconf.php
@@ -107,7 +107,7 @@ printf -v ccase %s "${arr[@]^}"
 
 # writing composer.json
 echo "{" > composer.json
-echo '    "name": "BFACTOR/mynewtemplate",' >> composer.json
+echo '    "name": "MYVENDOR/mynewtemplate",' >> composer.json
 echo '    "description": "MYTITLE",' >> composer.json
 echo '    "version": "1.0.0",' >> composer.json
 echo '    "type": "typo3-cms-extension",' >> composer.json
@@ -146,28 +146,28 @@ echo -e "<?php\n\nif (!defined('TYPO3_MODE')) die();" > ext_localconf.php
 # write pageTS integration
 echo -e "<?php\n\nif (!defined('TYPO3_MODE')) die();\n" > Configuration/TCA/Overrides/pages.php
 echo -e "call_user_func(function () {\n    \\TYPO3\\CMS\\Core\\Utility\\\ExtensionManagementUtility::registerPageTSConfigFile(" >> Configuration/TCA/Overrides/pages.php
-echo -e "        '$template',\n        'Configuration/PageTSconfig/page.ts',\n        'Seitendefinitionen B-Factor Template'" >> Configuration/TCA/Overrides/pages.php
+echo -e "        '$template',\n        'Configuration/PageTSconfig/page.tsconfig',\n        'Seitendefinitionen B-Factor Template'" >> Configuration/TCA/Overrides/pages.php
 echo -e "    );\n});" >> Configuration/TCA/Overrides/pages.php
 
 # write standard page config
-echo -e "page = PAGE\npage.typeNum = 0\npage.10 = FLUIDTEMPLATE\npage.10 {\n    format = html" > Configuration/TypoScript/setup.ts
-#echo -e "" >> Configuration/TypoScript/setup.ts
-echo -e "    file = EXT:$template/Resources/Private/Templates/Default.html" >> Configuration/TypoScript/setup.ts
-echo -e "    layoutRootPaths {\n        10 = EXT:$template/Resources/Private/Layouts/\n    }" >> Configuration/TypoScript/setup.ts
-echo -e "    partialRootPaths {\n        10 = EXT:$template/Resources/Private/Partials/\n    }" >> Configuration/TypoScript/setup.ts
-echo -e "    templateRootPaths {\n        10 = EXT:$template/Resources/Private/Templates/\n    }\n}" >> Configuration/TypoScript/setup.ts
-echo -e "page.includeJSFooter {" >> Configuration/TypoScript/setup.ts
-echo -e "    jquery = //ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js\n    jquery.external = 1" >> Configuration/TypoScript/setup.ts
-echo -e "    main = EXT:$template/Resources/Public/Js/main.js" >> Configuration/TypoScript/setup.ts
-echo -e "}" >> Configuration/TypoScript/setup.ts
-echo -e "page.includeCSS {" >> Configuration/TypoScript/setup.ts
-echo -e "    main = EXT:$template/Resources/Public/Css/styles.css" >> Configuration/TypoScript/setup.ts
-echo -e "}" >> Configuration/TypoScript/setup.ts
-echo -e "config {" >> Configuration/TypoScript/setup.ts
-echo -e "    language = de" >> Configuration/TypoScript/setup.ts
-echo -e "    spamProtectEmailAddresses = -2" >> Configuration/TypoScript/setup.ts
-echo -e '    spamProtectEmailAddresses_atSubst = <span style="display:none;">dontospamme</span>@<wbr><span style="display:none;">gowaway.</span>' >> Configuration/TypoScript/setup.ts
-echo -e "}" >> Configuration/TypoScript/setup.ts
+echo -e "page = PAGE\npage.typeNum = 0\npage.10 = FLUIDTEMPLATE\npage.10 {\n    format = html" > Configuration/TypoScript/setup.typoscript
+#echo -e "" >> Configuration/TypoScript/setup.typoscript
+echo -e "    file = EXT:$template/Resources/Private/Templates/Default.html" >> Configuration/TypoScript/setup.typoscript
+echo -e "    layoutRootPaths {\n        10 = EXT:$template/Resources/Private/Layouts/\n    }" >> Configuration/TypoScript/setup.typoscript
+echo -e "    partialRootPaths {\n        10 = EXT:$template/Resources/Private/Partials/\n    }" >> Configuration/TypoScript/setup.typoscript
+echo -e "    templateRootPaths {\n        10 = EXT:$template/Resources/Private/Templates/\n    }\n}" >> Configuration/TypoScript/setup.typoscript
+echo -e "page.includeJSFooter {" >> Configuration/TypoScript/setup.typoscript
+#echo -e "    jquery = //ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js\n    jquery.external = 1" >> Configuration/TypoScript/setup.typoscript
+echo -e "    main = EXT:$template/Resources/Public/Js/main.js" >> Configuration/TypoScript/setup.typoscript
+echo -e "}" >> Configuration/TypoScript/setup.typoscript
+echo -e "page.includeCSS {" >> Configuration/TypoScript/setup.typoscript
+echo -e "    main = EXT:$template/Resources/Public/Css/styles.css" >> Configuration/TypoScript/setup.typoscript
+echo -e "}" >> Configuration/TypoScript/setup.typoscript
+echo -e "config {" >> Configuration/TypoScript/setup.typoscript
+echo -e "    language = de" >> Configuration/TypoScript/setup.typoscript
+echo -e "    spamProtectEmailAddresses = -2" >> Configuration/TypoScript/setup.typoscript
+echo -e '    spamProtectEmailAddresses_atSubst = <span style="display:none;">dontospamme</span>@<wbr><span style="display:none;">gowaway.</span>' >> Configuration/TypoScript/setup.typoscript
+echo -e "}" >> Configuration/TypoScript/setup.typoscript
 
 # write the default template
 echo -e '<html xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers" xmlns="http://www.w3.org/1999/xhtml" lang="en" f:schemaLocation="https://fluidtypo3.org/schemas/fluid-master.xsd" data-namespace-typo3-fluid="true">' > Resources/Private/Templates/Default.html
